@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Character Details</title>
+{% endblock %}
+
+{% block content %}
+<h1 class="p-2 text-center">Character Details</h1>
+
+<div class="row justify-content-center">
+    <div class="col-auto">
+        <span> <h3>{{object.color.capitalize}} {{object.name.capitalize}}</h3></span>
+        <a class="btn btn-info" href="{% url 'character_update' object.id %}">Edit</a>
+        <a class="btn btn-info" href="{% url 'character_delete' object.id %}">Delete</a>
+    </div>
+</div>
+
+{% endblock %}

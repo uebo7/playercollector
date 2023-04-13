@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title%}
+<title>Players</title>
+{% endblock %}
+
+{% block content%}
+
+<h1 class="text-center p-2">Players</h1>
+
+
+<div class="container">
+    <div class="row g-5">
+        {% for player in players %}
+        <div class="col-md-3 col-6 text-center">
+            <a class="btn btn-info" href="{% url 'player_detail' player.id %}">
+                 <span>{{ player.name }}</span>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Delete {{ object.name }}</title>
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center p-2">Are You Sure You Want To Delete {{ object.name }}?</h1>
+
+<form method="POST">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-2">
+                {% csrf_token %}
+                <input class="btn btn-info" type="submit" value="Yes">
+                <a class="btn btn-info" href="{% url 'player_detail' object.id %}">No</a>
+            </div>
+        </div>  
+    </div>  
+</form>
+
+{% endblock %}

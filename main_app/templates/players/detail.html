@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Player Details</title>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center p-2">Player Details</h1>
+
+<div class="container">
+    <div class="row p-2 justify-content-center">
+        <div class="col-6 p-2">
+            <h2>Name: {{ player.name}}</h2>
+            <h5>Age: {{ player.age }}</h5>
+            <h5>Current Rank: {{ player.current_rank }}</h5>
+            <h5>Alltime Rank: {{ player.alltime_rank }}</h5>
+        </div>
+        <div class="col-6 p-2 text-center">
+            <form action="{% url 'add_win' player.id %}" method="POST">
+                {% csrf_token %}
+                {{ win_form.as_p }}
+                <input class="btn btn-info" type="submit" value="Add Win">
+            </form>
+        </div>
+    </div>
+    <div class="row p-2 justify-content-center">
+        <div class="col-md-6 col-6 p-2">
+            <table class="table mx-auto">
+                <thead>
+                    <tr>
+                        <th class="p-2 text-center">Date</th>
+                        <th class="p-2 text-center">Tourney Wins</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for win in player.win_set.all %}
+                        <tr>
+                            <td class="p-2 text-center">{{ win.date }}</td>
+                            <td class="p-2 text-center">{{ win.tourney_wins}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6 col-6 p-3 text-center">
+            <a class="btn btn-info m-1" href="{% url 'player_update' player.id %}">Update Player</a>
+            <a class="btn btn-info m-1" href="{% url 'player_delete' player.id %}">Delete Player</a>
+        </div>
+    </div>
+    <div class="row p-2 justify-content-center">
+        <div class="col-6">
+            <div class="row">
+                {% if player.characters.count %}
+                <h3 class="p-2 text-center">Characters In Use</h3>
+                {% for character in player.characters.all %}
+                <div class="col">
+                    <div class="text-center">
+                        <span> {{character.color}} {{character.name}} </span>
+                        <div>
+                            <form action="{% url 'unassoc_character' player.id character.id %}" method="POST">
+                                {% csrf_token %}
+                                <input type="submit" value="Remove" class="btn btn-danger">
+                            </form>
+                        </div>
+                   </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <h5 class="p-2 text-center">No Characters Played</h5>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                {% if characters.count %}
+                <h3 class="p-2 text-center">Character Choices</h3>
+                {% for character in characters %}
+                <div class="col">
+                    <div class="text-center">
+                        <span> {{ character.color.capitalize }} {{ character.name.capitalize }} </span>
+                        <form action="{% url 'assoc_character' player.id character.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" value="Add" class="btn btn-info">
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <h1 class="p-2 text-center">No Characters</h1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const datePickerEl = document.getElementById('id_date')
+    const formSelectEl = document.getElementById('id_tourney_wins')
+
+    M.Datepicker.init(datePickerEl, {
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
+    })
+    M.updateTextFields.init(formSelectEl)
+</script>
+
+
+
+{% endblock %}
